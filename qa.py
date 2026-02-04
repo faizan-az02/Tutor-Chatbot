@@ -86,7 +86,14 @@ while (True):
     # ---------------------------
     # Retrieve documents
     # ---------------------------
-    raw_docs = retriever.invoke(query)
+    raw_docs = retriever.invoke(
+        query,
+        config={
+            "run_name": "retrieve",
+            "tags": ["docs-qa", "rag", "retrieval"],
+            "metadata": {"k": 5, "query": query},
+        },
+    )
     docs = deduplicate_docs(raw_docs)
 
     print(f"Number of chunks: {len(docs)} obtained")
@@ -115,7 +122,14 @@ while (True):
     # ---------------------------
     # Generate answer
     # ---------------------------
-    response = llm.invoke([HumanMessage(content=prompt)])
+    response = llm.invoke(
+        [HumanMessage(content=prompt)],
+        config={
+            "run_name": "generate_answer",
+            "tags": ["docs-qa", "rag", "llm"],
+            "metadata": {"model": _MODEL},
+        },
+    )
     answer = response.content
 
     print("\n=== ANSWER ===")
