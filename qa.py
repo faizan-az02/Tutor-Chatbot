@@ -89,9 +89,6 @@ while (True):
     if query == "exit":
         break
 
-
-    # Retrieve documents using the retriever
-
     raw_docs = retriever.invoke(
         query,
         config={
