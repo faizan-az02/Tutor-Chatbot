@@ -1,11 +1,8 @@
 from langchain_community.document_loaders import PyPDFLoader
-from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 import os
-from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 
 
 data_folder = "data/"
@@ -35,12 +32,18 @@ for file in pdf_files:
 
 print(f"Loaded {i} pages from {pdf_count} PDFs".ljust(120), flush=True)
 print()
-print("=== DOCUMENT STRUCTURE CHECK ===")
-print(f"Type of documents: {type(documents)}")
-print(f"Number of documents: {len(documents)}")
-print("\n=== FIRST DOCUMENT ===")
-print(f"Content type: {type(documents[0].page_content)}")
-print(f"Content length: {len(documents[0].page_content)} characters")
-print(f"Content preview: {documents[0].page_content[:200]}...")
-print(f"\nMetadata: {documents[0].metadata}")
-print(f"Metadata keys: {list(documents[0].metadata.keys())}")
+
+splitter = RecursiveCharacterTextSplitter(chunk_size=700, chunk_overlap=50)
+all_chunks = []
+for doc in documents:
+    chunks = splitter.split_documents([doc])
+    all_chunks.extend(chunks)
+
+embedding_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+
+vectorstore = Chroma.from_documents(
+    documents=all_chunks,
+    embedding=embedding_model,
+    persist_directory="./chroma_db"
+)
+vectorstore.persist()
