@@ -37,6 +37,12 @@ Build the database:
 python db_setup.py
 ```
 
+Add more PDFs anytime (grow the DB):
+- Drop new `.pdf` files into the `data/` folder
+- Re-run `python db_setup.py`
+
+The script keeps `data/ingested.txt` (a simple list of already-ingested PDF filenames) so it **skips PDFs it has processed before** and only ingests the new ones.
+
 Run the Q&A bot:
 
 ```bash
