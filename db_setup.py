@@ -39,7 +39,11 @@ for doc in documents:
     chunks = splitter.split_documents([doc])
     all_chunks.extend(chunks)
 
+print("Creating embeddings...")
+
 embedding_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+
+print("Creating chroma database...")
 
 vectorstore = Chroma.from_documents(
     documents=all_chunks,

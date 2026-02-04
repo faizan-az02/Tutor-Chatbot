@@ -1,34 +1,28 @@
 import os
 import sys
-import openai
 from dotenv import load_dotenv
-
-# ---------------------------
-# LangChain imports
-# ---------------------------
+from langchain_openai import ChatOpenAI
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
-from langchain_core.documents import Document
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
 
-# ---------------------------
-# Load environment variables
-# ---------------------------
-load_dotenv()
-GITHUB_KEY = os.getenv("GITHUB_GPT5_KEY")
 
-# ---------------------------
+# Load environment variables
+
+load_dotenv()
+GITHUB_KEY = os.getenv("GITHUB_MODEL_KEY")
+
+
 # Initialize LLM (GitHub GPT-5)
-# ---------------------------
-# GitHub Models endpoint is OpenAI-compatible; configure via base_url.
+
 _BASE_URL = "https://models.inference.ai.azure.com"
 _MODEL = "gpt-4o-mini"
 llm = ChatOpenAI(model=_MODEL, temperature=0.2, api_key=GITHUB_KEY, base_url=_BASE_URL)
 
-# ---------------------------
+
 # Deduplication function
-# ---------------------------
+
 def deduplicate_docs(docs, preview_len=200):
     unique_docs = []
     seen = set()
@@ -55,9 +49,9 @@ def clear_screen() -> str:
     os.system("cls" if os.name == "nt" else "clear")
     return ""
 
-# ---------------------------
-# Load embeddings and vectorstore
-# ---------------------------
+
+# Load chroma database
+
 embedding_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
 vectorstore = Chroma(
@@ -72,9 +66,21 @@ retriever = vectorstore.as_retriever(
 
 print(clear_screen())
 
-print('\r\n', '='*50, '\r\n', 'Welcome to the AI-powered PDF QA system!', '\r\n', '='*50, '\r\n')
+print('\r\n', '='*50, '\r\n', 'Welcome to the AI-Powered Neural Networks Learning Bot!', '\r\n', '='*50, '\r\n')
 
 query = ""
+initial_prompt = "Greet the user and ask what do they want to learn about neural networks today using a chatbot which is an expert in neural networks and you are the chatbot, dont mention the word chatbot or bot or anything like that."
+
+response = llm.invoke(
+    [HumanMessage(content=initial_prompt)],
+    config={
+    "run_name": "generate_answer",
+    "metadata": {"model": _MODEL},
+    },
+)
+answer = response.content
+
+safe_print(answer +'\n')
 
 while (True):
 
@@ -83,9 +89,9 @@ while (True):
     if query == "exit":
         break
 
-    # ---------------------------
-    # Retrieve documents
-    # ---------------------------
+
+    # Retrieve documents using the retriever
+
     raw_docs = retriever.invoke(
         query,
         config={
@@ -98,16 +104,16 @@ while (True):
 
     print(f"Number of chunks: {len(docs)} obtained")
 
-    # ---------------------------
+
     # Build context for LLM
-    # ---------------------------
+
     context = "\n\n".join(
         f"[Source: {d.metadata.get('book_name', 'unknown')}]\n{d.page_content}"
         for d in docs
     )
 
     prompt = f"""
-    You are an expert in computer vision. Answer the question strictly using the context below.
+    You are an expert in neural networks. Answer the question strictly using the context below.
     Do NOT use any external knowledge. If the answer is not in the context, say you do not know.
 
     Context:
@@ -116,12 +122,11 @@ while (True):
     Question:
     {query}
 
-    Answer concisely and clearly.
+    Answer concisely and clearly and ask if the user wants to know more about the topic, like a teacher would. Just apologize ONLY if you don't know the answer and ask if they want to learn something else about Neural Networks.
     """
 
-    # ---------------------------
-    # Generate answer
-    # ---------------------------
+    # Generate answer using the LLM
+
     response = llm.invoke(
         [HumanMessage(content=prompt)],
         config={
