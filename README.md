@@ -1,19 +1,19 @@
-### Neural Networks Learning Bot
+### Teaching Chatbot
 
-A **AI-powered PDF Q&A bot** designed to help learners understand **Neural Networks end-to-end**, with a focus on **Artificial Neural Networks (ANNs)**. It ingests your study PDFs, builds a local vector database, retrieves the most relevant passages, and answers questions **grounded in your documents**.
+An **AI-powered teaching chatbot** that turns your PDFs into an interactive learning experience. It ingests your study materials, builds a local vector database, retrieves the most relevant passages, and answers questions **grounded in your documents**.
 
 ### Project Milestones
-- **Learning-first**: turn dense NN/ANN PDFs into an interactive study experience.
+- **Learning-first**: turn dense course notes and textbooks into a guided Q&A experience.
 - **Retrieval-Augmented Generation (RAG)**: answers are generated from retrieved context, not guesses.
 - **Practical LLM engineering**: demonstrates document ingestion, chunking, embeddings, vector search, and chat completion orchestration using LangChain.
 
 ### Key features
-- **PDF ingestion** from **PDFs**
-- **Chunking**
+- **PDF ingestion**
+- **Chunking** for retrieval-friendly context
 - **Embeddings** via **HuggingFaceEmbeddings**
 - **Vector search** with **Chroma**
-- **Interactive QA loop**
-- **Tracing via LangSmith**
+- **Interactive Q&A**
+- **Optional tracing** via **LangSmith**
 
 ### Tech stack
 - **Python**
