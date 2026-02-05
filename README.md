@@ -70,3 +70,4 @@ Disable LangSmith (optional): you can comment out/remove the `LANGCHAIN_*` varia
 ### Notes
 - The embedding model may download from HuggingFace on first run; ensure your network/DNS allows access to `huggingface.co`.
 - Answers are intended to be **document-grounded**—if the context doesn’t contain the answer, the bot should say it doesn’t know.
+- Optional: if you want the bot to fetch YouTube links automatically when asked, install `ddgs`:

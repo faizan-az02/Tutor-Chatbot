@@ -13,6 +13,8 @@ data_folder = "data/"
 documents = []
 i = 0
 
+print(clear_screen())
+
 pdf_files = sorted([f for f in os.listdir(data_folder) if f.lower().endswith(".pdf")])
 ingested_pdf_names = []
 ingested_path = os.path.join(data_folder, "ingested.txt")
@@ -23,9 +25,11 @@ if os.path.exists(ingested_path):
     with open(ingested_path, "r", encoding="utf-8") as f:
         already_ingested = {line.strip() for line in f.read().splitlines() if line.strip()}
 
-pdf_count = 0
+if len(pdf_files) == len(already_ingested):
+    print("All PDFs already ingested")
+    exit()
 
-print(clear_screen())
+pdf_count = 0
 
 for file in pdf_files:
 
@@ -87,5 +91,8 @@ if (embedding_model is not None):
         embedding=embedding_model,
         persist_directory="./chroma_db"
     )
+
+    print("Chroma database populated successfully")
 else:
     print("No embeddings found")
+
