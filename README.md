@@ -68,6 +68,7 @@ LANGCHAIN_ENDPOINT=https://eu.api.smith.langchain.com
 Disable LangSmith (optional): you can comment out/remove the `LANGCHAIN_*` variables and the app will run normally; tracing will simply be off.
 
 ### Notes
+- **Windows:** If you see `OSError: [WinError 1114] ... c10.dll` when running `python db_setup.py`, install [Microsoft Visual C++ Redistributable (x64)](https://aka.ms/vs/17/release/vc_redist.x64.exe), then try again.
 - The embedding model may download from HuggingFace on first run; ensure your network/DNS allows access to `huggingface.co`.
 - Answers are intended to be **document-grounded**—if the context doesn’t contain the answer, the bot should say it doesn’t know.
 - Optional: if you want the bot to fetch YouTube links automatically when asked, install `ddgs`:

@@ -7,7 +7,7 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
-
+from ddgs import DDGS
 
 # Load environment variables
 
@@ -72,22 +72,6 @@ def is_external_resource_request(user_query: str) -> bool:
 
 
 def search_youtube_links(topic: str, max_results: int = 5):
-    """
-    Try to web-search YouTube links for a topic using DuckDuckGo.
-
-    Returns:
-      - list[dict] on success (each dict: title, href/url, body/snippet)
-      - None if web search isn't available in this environment
-    """
-    try:
-        # New package name (preferred).
-        from ddgs import DDGS  # type: ignore[import-not-found]
-    except Exception:
-        try:
-            # Backward-compatible fallback (older installs).
-            from duckduckgo_search import DDGS  # type: ignore[import-not-found]  # optional dependency
-        except Exception:
-            return None
 
     q = f"site:youtube.com {topic}".strip()
     try:
