@@ -1,0 +1,25 @@
+# Web API
+flask>=3.0
+flask-cors>=4.0
+werkzeug>=3.0
+
+# Env
+python-dotenv>=1.0
+
+# LangChain + Chroma + embeddings
+langchain-openai>=0.2
+langchain-huggingface>=0.1
+langchain-chroma>=0.1
+langchain-community>=0.3
+langchain-text-splitters>=0.3
+langchain-core>=0.3
+sentence-transformers>=3.0
+
+# Vector DB
+chromadb>=0.5
+
+# PDF loading (used by langchain PyPDFLoader)
+pypdf>=4.0
+
+# Optional: YouTube link search
+ddgs>=7.0

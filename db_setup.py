@@ -1,6 +1,6 @@
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma
 import os
 from langchain_huggingface import HuggingFaceEmbeddings
 
@@ -9,7 +9,11 @@ def clear_screen() -> str:
     os.system("cls" if os.name == "nt" else "clear")
     return ""
 
-data_folder = "data/"
+_project_root = os.path.dirname(os.path.abspath(__file__))
+data_folder = os.environ.get("DATA_FOLDER", os.path.join(_project_root, "data"))
+if not data_folder.endswith(os.sep):
+    data_folder = data_folder + os.sep
+persist_directory = os.environ.get("CHROMA_PERSIST_DIR", os.path.join(_project_root, "chroma_db"))
 documents = []
 i = 0
 
@@ -89,7 +93,7 @@ if (embedding_model is not None):
     vectorstore = Chroma.from_documents(
         documents=all_chunks,
         embedding=embedding_model,
-        persist_directory="./chroma_db"
+        persist_directory=persist_directory,
     )
 
     print("Chroma database populated successfully")

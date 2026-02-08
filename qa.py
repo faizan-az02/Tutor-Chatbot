@@ -95,15 +95,29 @@ def clear_screen() -> str:
 # If you prefer all-MiniLM-L6-v2, run: pip install -U transformers huggingface_hub
 embedding_model = HuggingFaceEmbeddings(model_name="BAAI/bge-small-en-v1.5")
 
+_chroma_dir = os.environ.get("CHROMA_PERSIST_DIR", os.path.join(os.path.dirname(os.path.abspath(__file__)), "chroma_db"))
 vectorstore = Chroma(
-    persist_directory="./chroma_db",
-    embedding_function=embedding_model
+    persist_directory=_chroma_dir,
+    embedding_function=embedding_model,
 )
 
 retriever = vectorstore.as_retriever(
     search_type="similarity",
     search_kwargs={"k": 5}
 )
+
+
+def reload_vectorstore():
+    """Re-load Chroma from disk so new ingest data is visible to the retriever."""
+    global vectorstore, retriever
+    vectorstore = Chroma(
+        persist_directory=_chroma_dir,
+        embedding_function=embedding_model,
+    )
+    retriever = vectorstore.as_retriever(
+        search_type="similarity",
+        search_kwargs={"k": 5},
+    )
 
 INITIAL_PROMPT = (
     "Greet the user and ask what do they want to learn today using you, which is a teaching chatbot, "
@@ -161,6 +175,11 @@ def answer_query(user_query: str) -> dict:
         },
     )
     docs = deduplicate_docs(raw_docs)
+    if not docs:
+        return {
+            "answer": "Hi there, I don't have any study materials to search yet. Please add PDFs and run Ingest first, then I can answer from your documents.",
+            "youtube_links": None,
+        }
     context = "\n\n".join(
         f"[Source: {d.metadata.get('book_name', 'unknown')}]\n{d.page_content}"
         for d in docs

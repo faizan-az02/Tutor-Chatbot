@@ -1,8 +1,3 @@
-"""
-Flask API for the Tutor Chatbot. Serves the frontend and exposes /api/greeting, /api/chat, upload + ingest.
-Run: python api.py
-Then open http://127.0.0.1:5000 in a browser.
-"""
 import os
 import re
 import sys
@@ -19,7 +14,10 @@ app = Flask(__name__, static_folder="frontend", static_url_path="")
 CORS(app)
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-DATA_FOLDER = os.path.join(PROJECT_ROOT, "data")
+DATA_FOLDER = os.environ.get("DATA_FOLDER", os.path.join(PROJECT_ROOT, "data"))
+CHROMA_PERSIST_DIR = os.environ.get("CHROMA_PERSIST_DIR", os.path.join(PROJECT_ROOT, "chroma_db"))
+os.makedirs(DATA_FOLDER, exist_ok=True)
+os.makedirs(CHROMA_PERSIST_DIR, exist_ok=True)
 ALLOWED_EXTENSIONS = {"pdf"}
 
 
@@ -56,6 +54,8 @@ def chat():
         result = answer_query(query)
         return jsonify(result)
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         return jsonify({"answer": f"Error: {e}", "youtube_links": None}), 500
 
 
@@ -143,9 +143,13 @@ def _parse_page_progress(line: str):
 def ingest_stream():
     yield f"data: {json.dumps({'stage': 'start', 'line': 'Starting ingestion...'})}\n\n"
     try:
+        env = os.environ.copy()
+        env["DATA_FOLDER"] = DATA_FOLDER
+        env["CHROMA_PERSIST_DIR"] = CHROMA_PERSIST_DIR
         proc = subprocess.Popen(
             [sys.executable, os.path.join(PROJECT_ROOT, "db_setup.py")],
             cwd=PROJECT_ROOT,
+            env=env,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
@@ -176,6 +180,13 @@ def ingest_stream():
         if proc.returncode != 0:
             yield f"data: {json.dumps({'stage': 'error', 'line': f'Process exited with code {proc.returncode}'})}\n\n"
         else:
+            try:
+                from qa import reload_vectorstore
+                reload_vectorstore()
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                sys.stderr.write("reload_vectorstore failed: %s\n" % e)
             yield f"data: {json.dumps({'stage': 'done', 'line': 'Chroma database updated.'})}\n\n"
     except Exception as e:
         yield f"data: {json.dumps({'stage': 'error', 'line': str(e)})}\n\n"
@@ -192,4 +203,10 @@ def ingest_stream_route():
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    app.run(host="127.0.0.1", port=port, debug=True)
+    in_production = "PORT" in os.environ
+    print("On your machine, open http://127.0.0.1:5000 in a browser.")
+    app.run(
+        host="0.0.0.0" if in_production else "127.0.0.1",
+        port=port,
+        debug=not in_production,
+    )

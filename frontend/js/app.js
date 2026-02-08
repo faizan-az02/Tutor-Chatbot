@@ -96,8 +96,13 @@
       body: JSON.stringify({ query: query }),
     })
       .then(function (res) {
-        if (!res.ok) throw new Error("Request failed");
-        return res.json();
+        return res.json().then(function (data) {
+          if (!res.ok) {
+            var msg = (data && (data.answer || data.error)) || "Request failed";
+            throw new Error(msg);
+          }
+          return data;
+        });
       })
       .then(function (data) {
         addMessage(data.answer || "No response.", "bot", {
@@ -105,7 +110,7 @@
         });
       })
       .catch(function (err) {
-        addMessage("Something went wrong. " + err.message, "bot", { error: true });
+        addMessage("Something went wrong. " + (err.message || "Request failed"), "bot", { error: true });
       })
       .finally(function () {
         setLoading(false);
