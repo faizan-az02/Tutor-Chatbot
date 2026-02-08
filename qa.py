@@ -10,8 +10,10 @@ from langchain_core.messages import HumanMessage
 from ddgs import DDGS
 
 # Load environment variables
-
-load_dotenv()
+# Try app root first, then /etc/secrets/.env (Render secret files)
+load_dotenv()  # Looks for .env in current directory
+if os.path.exists("/etc/secrets/.env"):
+    load_dotenv("/etc/secrets/.env", override=True)  # Render secret files override if present
 GITHUB_KEY = os.getenv("GITHUB_MODEL_KEY")
 
 
