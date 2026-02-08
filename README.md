@@ -16,16 +16,15 @@ An **AI-powered teaching chatbot** that turns your PDFs into an interactive Q&A 
 
 ```
 Tutor-Chatbot/
-├── api.py           # Flask app: serves frontend + /api/greeting, /api/chat, upload, ingest
-├── qa.py            # RAG: Chroma + HuggingFace embeddings + LLM (answer_query, get_greeting)
-├── db_setup.py      # PDF ingestion → chunks → Chroma (run as subprocess by API)
+├── api.py           # Flask app
+├── qa.py            # RAG: Chroma + HuggingFace embeddings + LLM
+├── db_setup.py      # PDF ingestion → chunks → Chroma
 ├── requirements.txt # Python dependencies
-├── Dockerfile       # Image: Python 3.12 + deps + app; CMD python api.py
-├── .env             # GITHUB_MODEL_KEY (required); optional LANGCHAIN_* (not in repo)
-├── data/            # PDFs + ingested.txt (writable)
-├── chroma_db/       # Chroma vector DB (writable, created by db_setup)
-└── frontend/        # Static HTML, CSS, JS (served by Flask)
-```
+├── Dockerfile       # Image: Python 3.12 + deps + app, CMD python api.py
+├── .env             # GITHUB_MODEL_KEY required
+├── data/            # PDFs + ingested.txt
+├── chroma_db/       # Chroma vector DB
+└── frontend/        # Static HTML, CSS, JS
 
 ---
 
