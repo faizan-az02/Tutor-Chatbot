@@ -76,10 +76,10 @@ if (len(all_chunks) > 0):
 
     print("Generating embeddings...")
 
-    embedding_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    # Use BAAI/bge-small-en-v1.5 (avoids 404 on additional_chat_templates with recent transformers).
+    embedding_model = HuggingFaceEmbeddings(model_name="BAAI/bge-small-en-v1.5")
 
 else:
-
     print("No data found")
 
 if (embedding_model is not None):

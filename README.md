@@ -43,11 +43,21 @@ Add more PDFs anytime (grow the DB):
 
 The script keeps `data/ingested.txt` (a simple list of already-ingested PDF filenames) so it **skips PDFs it has processed before** and only ingests the new ones.
 
-Run the Q&A bot:
+Run the Q&A bot (terminal):
 
 ```bash
 python qa.py
 ```
+
+### Web frontend
+
+To use the chat in the browser:
+
+1. Install the API dependencies: `pip install flask flask-cors`
+2. Start the server: `python api.py`
+3. Open **http://127.0.0.1:5000** in your browser.
+
+The frontend is in `frontend/` (HTML, CSS, JS). The API serves it and exposes `/api/greeting` and `/api/chat`.
 
 ### LangSmith
 LangSmith adds **tracing/observability** for your RAG pipeline (retrieval → prompt → model output). It helps you debug “why did it answer this?” by showing the retrieved chunks, prompt, latency, and errors.

@@ -1,4 +1,5 @@
-abdellatif.pdf
+vardhman.pdf
 dhulla-pally.pdf
+abdellatif.pdf
 prince.pdf
 szeliski.pdf
