@@ -20,8 +20,11 @@
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 
+  const chatWelcome = document.getElementById("chat-welcome");
+
   function addMessage(content, role, options) {
     hideTyping();
+    if (chatWelcome) chatWelcome.classList.add("hidden");
     const div = document.createElement("div");
     div.className = "message " + role;
     if (options && options.error) div.classList.add("error");

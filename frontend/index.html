@@ -8,17 +8,23 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div class="page-bg" aria-hidden="true"></div>
   <div class="app">
     <header class="header">
       <div class="header-row">
-        <div>
-          <h1>AI Tutor</h1>
+        <div class="header-brand">
+          <div class="header-title-row">
+            <span class="header-icon" aria-hidden="true">◇</span>
+            <h1>AI Tutor</h1>
+          </div>
           <p class="tagline">Ask anything from your study materials</p>
         </div>
-        <button type="button" id="add-pdfs-btn" class="add-pdfs-btn" aria-label="Add PDFs">Add PDFs</button>
+        <button type="button" id="add-pdfs-btn" class="add-pdfs-btn" aria-label="Add PDFs">
+          <span class="add-pdfs-btn-icon">+</span> Add PDFs
+        </button>
       </div>
     </header>
 
@@ -58,6 +64,10 @@
     </div>
 
     <main class="chat-container">
+      <div class="chat-welcome" id="chat-welcome" aria-hidden="true">
+        <div class="chat-welcome-icon">💡</div>
+        <p>Your study assistant. Ask questions from your PDFs—answers stay grounded in your materials.</p>
+      </div>
       <div id="messages" class="messages" role="log" aria-live="polite">
         <div class="message bot typing" id="typing" aria-hidden="true">
           <span class="typing-dots"><span>.</span><span>.</span><span>.</span></span>
