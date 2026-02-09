@@ -63,13 +63,77 @@ body {
 .app {
   position: relative;
   z-index: 1;
-  max-width: 720px;
+  max-width: 920px;
   margin: 0 auto;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   background: var(--surface);
   box-shadow: 0 0 0 1px var(--border-soft), 0 24px 48px -24px rgba(15, 23, 42, 0.12);
+}
+
+/* Wider desktop layout: left brand sidebar + wide chat */
+@media (min-width: 900px) {
+  .app {
+    max-width: 1160px;
+    margin: 1.75rem auto;
+    min-height: calc(100vh - 3.5rem);
+    border-radius: 22px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    grid-template-rows: 1fr;
+  }
+
+  .header {
+    grid-column: 1;
+    grid-row: 1;
+    border-bottom: none;
+    border-right: 1px solid var(--border-soft);
+    padding: 2rem 1.75rem;
+  }
+
+  .header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1.25rem;
+  }
+
+  .header-brand {
+    gap: 0.35rem;
+  }
+
+  .header-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    font-size: 1.15rem;
+  }
+
+  .header h1 {
+    font-size: 1.9rem;
+  }
+
+  .tagline {
+    padding-left: 0;
+    font-size: 0.95rem;
+  }
+
+  .add-pdfs-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .chat-container {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 0 2.25rem;
+  }
+
+  .chat-welcome {
+    max-width: 480px;
+  }
 }
 
 .header {
@@ -261,35 +325,41 @@ body {
 
 .ingest-upload-zone {
   margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
 }
 
 .ingest-file-label {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 112px;
-  padding: 1.5rem;
-  background: var(--bg);
-  border: 2px dashed var(--border-soft);
-  border-radius: var(--radius);
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: var(--accent-soft);
+  border: 1px solid rgba(37, 99, 235, 0.35);
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.15s;
 }
 
 .ingest-file-label:hover {
+  background: var(--accent);
   border-color: var(--accent);
-  background: var(--accent-soft);
-  box-shadow: 0 0 0 2px var(--accent-glow);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+  transform: translateY(-1px);
 }
 
 .ingest-file-label-text {
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.01em;
 }
 
 .ingest-file-label:hover .ingest-file-label-text {
-  color: var(--accent);
+  color: #fff;
 }
 
 .ingest-file-input {
@@ -302,9 +372,10 @@ body {
 }
 
 .ingest-file-list {
-  margin-top: 0.75rem;
-  padding: 0.5rem 0;
-  font-size: 0.875rem;
+  margin-top: 0;
+  width: 100%;
+  padding: 0;
+  font-size: 0.95rem;
   color: var(--text-muted);
   max-height: 120px;
   overflow-y: auto;
@@ -320,11 +391,13 @@ body {
 }
 
 .ingest-file-list > div {
-  padding: 0.35rem 0;
-  padding-left: 1rem;
-  border-left: 2px solid var(--accent);
-  margin-bottom: 0.25rem;
+  padding: 0.6rem 0.75rem;
+  border-left: 3px solid var(--accent);
+  margin-bottom: 0.5rem;
   color: var(--text);
+  background: var(--surface);
+  border-radius: 12px;
+  box-shadow: 0 0 0 1px var(--border-soft);
 }
 
 .ingest-progress {
