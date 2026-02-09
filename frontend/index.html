@@ -12,21 +12,21 @@
 </head>
 <body>
   <div class="page-bg" aria-hidden="true"></div>
-  <div class="app">
-    <header class="header">
-      <div class="header-row">
-        <div class="header-brand">
-          <div class="header-title-row">
-            <span class="header-icon" aria-hidden="true">◇</span>
-            <h1>AI Tutor</h1>
-          </div>
-          <p class="tagline">Ask anything from your study materials</p>
-        </div>
-        <button type="button" id="add-pdfs-btn" class="add-pdfs-btn" aria-label="Add PDFs">
-          <span class="add-pdfs-btn-icon">+</span> Add PDFs
-        </button>
+  <header class="page-brand" aria-label="AI Tutor">
+    <div class="page-brand-row">
+      <span class="page-brand-icon" aria-hidden="true">AI</span>
+      <div class="page-brand-text">
+        <div class="page-brand-name">AI Tutor</div>
+        <div class="page-brand-tagline">Ask anything from your study materials</div>
       </div>
-    </header>
+    </div>
+  </header>
+  <div class="app">
+    <div class="app-topbar" aria-label="Actions">
+      <button type="button" id="add-pdfs-btn" class="add-pdfs-btn" aria-label="Add PDFs">
+        <span class="add-pdfs-btn-icon">+</span> Add PDFs
+      </button>
+    </div>
 
     <!-- Ingest PDFs modal -->
     <div id="ingest-modal" class="modal" role="dialog" aria-labelledby="ingest-modal-title" aria-modal="true" hidden>

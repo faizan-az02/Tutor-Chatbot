@@ -63,7 +63,7 @@ body {
 .app {
   position: relative;
   z-index: 1;
-  max-width: 920px;
+  max-width: 880px;
   margin: 0 auto;
   min-height: 100vh;
   display: flex;
@@ -72,67 +72,122 @@ body {
   box-shadow: 0 0 0 1px var(--border-soft), 0 24px 48px -24px rgba(15, 23, 42, 0.12);
 }
 
-/* Wider desktop layout: left brand sidebar + wide chat */
+/* Brand lives outside the chat panel */
+.page-brand {
+  position: relative;
+  z-index: 2;
+  padding: 1rem 1.25rem 0.5rem;
+}
+
+.page-brand-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.9rem 1rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 0 1px var(--border-soft), 0 18px 34px -26px rgba(15, 23, 42, 0.25);
+  max-width: min(520px, calc(100vw - 2.5rem));
+}
+
+.page-brand-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  font-family: "Outfit", "DM Sans", system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: #fff;
+  background: linear-gradient(145deg, #2563eb 0%, #7c3aed 100%);
+  box-shadow: 0 14px 28px -18px rgba(37, 99, 235, 0.95), 0 12px 22px -18px rgba(124, 58, 237, 0.85);
+  position: relative;
+  overflow: hidden;
+}
+
+.page-brand-icon::after {
+  content: "";
+  position: absolute;
+  inset: -40% -60%;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0) 55%);
+  transform: rotate(18deg);
+}
+
+.page-brand-text {
+  min-width: 0;
+}
+
+.page-brand-name {
+  font-family: "Outfit", "DM Sans", system-ui, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.page-brand-tagline {
+  margin-top: 0.15rem;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-topbar {
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: flex-end;
+  border-bottom: 1px solid var(--border-soft);
+  background: var(--surface);
+  flex-shrink: 0;
+}
+
+/* Wider desktop layout: full-width chat, bigger brand top-left */
 @media (min-width: 900px) {
   .app {
-    max-width: 1160px;
-    margin: 1.75rem auto;
-    min-height: calc(100vh - 3.5rem);
+    max-width: 980px;
+    margin: 108px auto 1.75rem;
+    min-height: calc(100vh - 4.25rem);
     border-radius: 22px;
     overflow: hidden;
-    display: grid;
-    grid-template-columns: 320px 1fr;
-    grid-template-rows: 1fr;
   }
 
-  .header {
-    grid-column: 1;
-    grid-row: 1;
-    border-bottom: none;
-    border-right: 1px solid var(--border-soft);
-    padding: 2rem 1.75rem;
+  .page-brand {
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    padding: 0;
   }
 
-  .header-row {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: 1.25rem;
+  .page-brand-row {
+    padding: 1rem 1.1rem;
+    max-width: 560px;
   }
 
-  .header-brand {
-    gap: 0.35rem;
+  .page-brand-name {
+    font-size: 1.35rem;
   }
 
-  .header-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    font-size: 1.15rem;
-  }
-
-  .header h1 {
-    font-size: 1.9rem;
-  }
-
-  .tagline {
-    padding-left: 0;
+  .page-brand-tagline {
     font-size: 0.95rem;
   }
 
-  .add-pdfs-btn {
-    width: 100%;
-    justify-content: center;
+  .app-topbar {
+    padding: 1.25rem 2.25rem;
   }
 
   .chat-container {
-    grid-column: 2;
-    grid-row: 1;
     padding: 0 2.25rem;
   }
 
   .chat-welcome {
-    max-width: 480px;
+    max-width: 520px;
   }
 }
 
