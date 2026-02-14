@@ -22,6 +22,8 @@
   --radius-pill: 999px;
   --shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
   --shadow-soft: 0 2px 12px rgba(15, 23, 42, 0.06);
+  --page-top-gap: 112px;
+  --page-bottom-gap: 24px;
 }
 
 * {
@@ -30,13 +32,15 @@
 
 body {
   margin: 0;
-  min-height: 100vh;
+  height: 100vh;
   font-family: "DM Sans", system-ui, -apple-system, sans-serif;
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   position: relative;
+  overflow: hidden; /* Page itself should not scroll */
+  padding: var(--page-top-gap) 0 var(--page-bottom-gap);
 }
 
 /* Full-viewport background: image + overlay (real element so it always paints) */
@@ -65,26 +69,31 @@ body {
   z-index: 1;
   max-width: 880px;
   margin: 0 auto;
-  min-height: 100vh;
+  height: 100%;
+  max-height: 100%;
   display: flex;
   flex-direction: column;
   background: var(--surface);
+  border-radius: 22px;
+  overflow: hidden; /* keep scroll inside messages */
   box-shadow: 0 0 0 1px var(--border-soft), 0 24px 48px -24px rgba(15, 23, 42, 0.12);
 }
 
 /* Brand lives outside the chat panel */
 .page-brand {
-  position: relative;
+  position: fixed;
   z-index: 2;
-  padding: 1rem 1.25rem 0.5rem;
+  top: 18px;
+  left: 18px;
+  padding: 0;
 }
 
 .page-brand-row {
   display: inline-flex;
   align-items: center;
   gap: 0.85rem;
-  padding: 0.9rem 1rem;
-  border-radius: 18px;
+  padding: 1.05rem 1.2rem;
+  border-radius: 22px;
   background: rgba(255, 255, 255, 0.65);
   backdrop-filter: blur(10px);
   box-shadow: 0 0 0 1px var(--border-soft), 0 18px 34px -26px rgba(15, 23, 42, 0.25);
@@ -95,9 +104,9 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 16px;
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
   font-family: "Outfit", "DM Sans", system-ui, sans-serif;
   font-weight: 800;
   letter-spacing: -0.04em;
@@ -122,60 +131,80 @@ body {
 
 .page-brand-name {
   font-family: "Outfit", "DM Sans", system-ui, sans-serif;
-  font-size: 1.25rem;
+  font-size: 1.45rem;
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 1.1;
-  color: var(--text);
+  /* Gradient text (with solid fallback) */
+  color: #1d4ed8;
+  background: linear-gradient(90deg, #2563eb 0%, #7c3aed 55%, #db2777 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .page-brand-tagline {
   margin-top: 0.15rem;
-  font-size: 0.92rem;
-  color: var(--text-muted);
+  font-size: 0.98rem;
+  color: #475569;
   letter-spacing: 0.01em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+/* Avoid transparent text in forced-colors / high-contrast modes */
+@media (forced-colors: active) {
+  .page-brand-name {
+    background: none;
+    -webkit-text-fill-color: CanvasText;
+    color: CanvasText;
+  }
+}
+
 .app-topbar {
   padding: 1rem 1.25rem;
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: 1rem;
   border-bottom: 1px solid var(--border-soft);
   background: var(--surface);
   flex-shrink: 0;
 }
 
+.app-topbar-left {
+  margin-right: auto;
+}
+
 /* Wider desktop layout: full-width chat, bigger brand top-left */
 @media (min-width: 900px) {
+  :root {
+    --page-top-gap: 120px;
+    --page-bottom-gap: 28px;
+  }
+
   .app {
     max-width: 980px;
-    margin: 108px auto 1.75rem;
-    min-height: calc(100vh - 4.25rem);
-    border-radius: 22px;
-    overflow: hidden;
+    height: 100%;
   }
 
   .page-brand {
-    position: fixed;
     top: 18px;
     left: 18px;
-    padding: 0;
   }
 
   .page-brand-row {
-    padding: 1rem 1.1rem;
+    padding: 1.2rem 1.35rem;
     max-width: 560px;
   }
 
   .page-brand-name {
-    font-size: 1.35rem;
+    font-size: 1.75rem;
   }
 
   .page-brand-tagline {
-    font-size: 0.95rem;
+    font-size: 1.05rem;
   }
 
   .app-topbar {
